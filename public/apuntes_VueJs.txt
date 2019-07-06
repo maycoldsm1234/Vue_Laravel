@@ -58,7 +58,8 @@
 
     [Propiedad] v-on:click('AgregarNota')
         Este evento se ejecuta, cuando recibe algún click en el btn Agregar
-[*] 
+
+[*] Axios Permite realizar peticiones Http desde el navegador y retorna archivos Json
 
 
 [*] 

@@ -8,10 +8,11 @@
     git add -A 
 
     Nombre del primer commit
-    git commit -m "Proyecto Base.."
+    git commit -m "Actualización de rutas CategoriasController"
 
     git remote add origin [https://github.com/bolivar014/AppShop.git]
-
+ 	git remote add origin https://github.com/bolivar014/CursoVueJS_Laravel
+	 
     git push -f origin master
 
 [*] Descargar el repositorio inicial de laravel.

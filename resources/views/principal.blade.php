@@ -14,7 +14,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Icons -->
-    <link href="css/plantilla.css" rel="stylesheet"> 
+    <link href="css/plantilla.css" rel="stylesheet">
+ 
+    <!-- Path to Popper - it is for dropsdowns etc in bootstrap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+ 
 </head>
 
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
@@ -86,13 +91,15 @@
         <span class="ml-auto">Desarrollado por <a href="http://www.incanatoit.com/">IncanatoIT</a></span>
     </footer>
 
-    <!-- Bootstrap and necessary plugins -->
-    <script src="js/plantilla.js"></script>
-    <script src="js/app.js"></script>
-    
-     <!-- CDN JQuery -->
-     <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <!-- CDN JQuery -->
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <!-- FIN - CDN JQuery -->
+
+    <!-- Bootstrap and necessary plugins -->
+    <script src="js/app.js"></script>
+
+    <script src="js/plantilla.js"></script>
+    
 </body>
 
 </html>
