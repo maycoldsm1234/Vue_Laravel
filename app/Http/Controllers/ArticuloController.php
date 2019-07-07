@@ -77,7 +77,7 @@ class ArticuloController extends Controller
      */
     public function update(Request $request)
     {
-        //
+        
         if (!$request->ajax()) return redirect('/');
        
         $articulo = Articulo::findOrFail($request->id);
@@ -88,7 +88,8 @@ class ArticuloController extends Controller
         $articulo->stock = $request->input('stock');
         $articulo->descripcion = $request->input('descripcion');
         $articulo->condicion = '1';
-        $categorias->save();
+        $articulo->save();
+        
     }
 
     /**

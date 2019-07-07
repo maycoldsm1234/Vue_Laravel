@@ -1997,22 +1997,26 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     //
-    actualizarCategoria: function actualizarCategoria() {
-      if (this.validarCategoria()) {
+    actualizarArticulo: function actualizarArticulo() {
+      if (this.validarArticulo()) {
         return;
       }
 
       var me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
 
-      axios.put('/categoria/actualizar', {
+      axios.put('/articulo/actualizar', {
         // Almacena los nuevos parametros enviados por medio de esta petición
+        'idcategoria': this.idcategoria,
+        'codigo': this.codigo,
         'nombre': this.nombre,
+        'precio_venta': this.precio_venta,
+        'stock': this.stock,
         'descripcion': this.descripcion,
-        'id': this.categoria_id
+        'id': this.articulo_id
       }).then(function (response) {
         //En caso de registrar la categoria, realizara estas dos funciones.
         me.cerrarModal();
-        me.listarCategoria(1, '', 'nombre');
+        me.listarArticulo(1, '', 'nombre');
       })["catch"](function (error) {
         console.log(error);
       });
@@ -39096,7 +39100,7 @@ var render = function() {
                           staticClass: "col-md-3 form-control-label",
                           attrs: { for: "text-input" }
                         },
-                        [_vm._v("Precio Veenta")]
+                        [_vm._v("Precio Venta")]
                       ),
                       _vm._v(" "),
                       _c("div", { staticClass: "col-md-9" }, [
@@ -39164,7 +39168,7 @@ var render = function() {
                         "label",
                         {
                           staticClass: "col-md-3 form-control-label",
-                          attrs: { for: "email-input" }
+                          attrs: { for: "text-input" }
                         },
                         [_vm._v("Descripción")]
                       ),
@@ -39181,7 +39185,7 @@ var render = function() {
                           ],
                           staticClass: "form-control",
                           attrs: {
-                            type: "email",
+                            type: "text",
                             placeholder: "Ingrese Descripción"
                           },
                           domProps: { value: _vm.descripcion },
@@ -39234,7 +39238,7 @@ var render = function() {
                 _c(
                   "button",
                   {
-                    staticClass: "btn btn-secondary",
+                    staticClass: "btn btn-danger",
                     attrs: { type: "button" },
                     on: {
                       click: function($event) {

@@ -126,7 +126,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Precio Veenta</label>
+                                <label class="col-md-3 form-control-label" for="text-input">Precio Venta</label>
                                 <div class="col-md-9">
                                     <input type="text" v-model="precio_venta" class="form-control" placeholder="">
                                 </div>
@@ -138,9 +138,9 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="email-input">Descripción</label>
+                                <label class="col-md-3 form-control-label" for="text-input">Descripción</label>
                                 <div class="col-md-9">
-                                    <input type="email" v-model="descripcion" class="form-control" placeholder="Ingrese Descripción">
+                                    <input type="text" v-model="descripcion" class="form-control" placeholder="Ingrese Descripción">
                                 </div>
                             </div>
                             <div v-show="errorArticulo" class="form-group row div-error">
@@ -154,7 +154,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
+                        <button type="button" class="btn btn-danger" @click="cerrarModal()">Cerrar</button>
                         <button type="button" class="btn btn-primary" v-if="tipoAccion==1" @click="registrarArticulo()">Guardar</button>
                         <button type="button" class="btn btn-success" v-if="tipoAccion==2" @click="actualizarArticulo()">Actualizar</button>
                     </div>
@@ -319,23 +319,28 @@
             },
         
             //
-            actualizarCategoria()
+            actualizarArticulo()
             {
-                  if(this.validarCategoria()){
+                if(this.validarArticulo())
+                {
                     return;
                 }
 
                 let me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
-                axios.put('/categoria/actualizar',{
+                axios.put('/articulo/actualizar',{
                     // Almacena los nuevos parametros enviados por medio de esta petición
-                    'nombre' : this.nombre,
+                    'idcategoria': this.idcategoria,
+                    'codigo': this.codigo,
+                    'nombre': this.nombre,
+                    'precio_venta': this.precio_venta,
+                    'stock': this.stock,
                     'descripcion' : this.descripcion,
-                    'id' : this.categoria_id
+                    'id' : this.articulo_id
 
                 }).then(function(response){
                     //En caso de registrar la categoria, realizara estas dos funciones.
                     me.cerrarModal();
-                    me.listarCategoria(1,'','nombre');
+                    me.listarArticulo(1,'','nombre');
                 }).catch(function (error){
                     console.log(error)
                 });
