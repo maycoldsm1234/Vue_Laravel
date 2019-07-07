@@ -1973,21 +1973,25 @@ __webpack_require__.r(__webpack_exports__);
       me.listarArticulo(page, buscar, criterio);
     },
     //
-    registrarCategoria: function registrarCategoria() {
-      if (this.validarCategoria()) {
+    registrarArticulo: function registrarArticulo() {
+      if (this.validarArticulo()) {
         return;
       }
 
       var me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
 
-      axios.post('/categoria/registrar', {
+      axios.post('/articulo/registrar', {
         // Almacena los nuevos parametros enviados por medio de esta petición
+        'idcategoria': this.idcategoria,
+        'codigo': this.codigo,
         'nombre': this.nombre,
+        'stock': this.stock,
+        'precio_venta': this.precio_venta,
         'descripcion': this.descripcion
       }).then(function (response) {
         //En caso de registrar la categoria, realizara estas dos funciones.
         me.cerrarModal();
-        me.listarCategoria(1, '', 'nombre');
+        me.listarArticulo(1, '', 'nombre');
       })["catch"](function (error) {
         console.log(error);
       });
@@ -2088,21 +2092,30 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     //
-    validarCategoria: function validarCategoria() {
-      this.errorCategoria = 0;
-      this.errorMostrarMensajeCategoria = []; //Validaciones
+    validarArticulo: function validarArticulo() {
+      this.errorArticulo = 0;
+      this.errorMostrarMensajeArticulo = []; //Validaciones
 
-      if (!this.nombre) this.errorMostrarMensajeCategoria.push("El nombre de la Categoria no puede estar Vacío..."); // Cuando tiene un error de registro, la variable errorCategoria pasa a 1
+      if (this.idcategoria == 0) this.errorMostrarMensajeArticulo.push("Seleccione una Categoria");
+      if (!this.nombre) this.errorMostrarMensajeArticulo.push("El nombre del Articulo no puede estar Vacío...");
+      if (!this.stock) this.errorMostrarMensajeArticulo.push("El stock del Articulo debe ser un número y no puede estar Vacío...");
+      if (!this.precio_venta) this.errorMostrarMensajeArticulo.push("El Precio del Articulo debe ser un número y no puede estar Vacío..."); // Cuando tiene un error de registro, la variable errorCategoria pasa a 1
 
-      if (this.errorMostrarMensajeCategoria.length) this.errorCategoria = 1;
-      return this.errorCategoria;
+      if (this.errorMostrarMensajeArticulo.length) this.errorArticulo = 1;
+      return this.errorArticulo;
     },
     //
     cerrarModal: function cerrarModal() {
       this.modal = 0;
       this.tituloModal = '';
+      this.idcategoria = 0;
+      this.nombre_categoria = '';
+      this.codigo = '';
       this.nombre = '';
+      this.precio_venta = 0;
+      this.stock = 0;
       this.descripcion = '';
+      this.errorArticulo = 0;
     },
     //abrirModal(model, action, data = []){
     abrirModal: function abrirModal(modelo, accion) {
@@ -2116,7 +2129,12 @@ __webpack_require__.r(__webpack_exports__);
                 {
                   this.modal = 1;
                   this.tituloModal = 'Registrar Articulo';
+                  this.idcategoria = 0;
+                  this.nombre_categoria = '';
+                  this.codigo = '';
                   this.nombre = '';
+                  this.precio_venta = '';
+                  this.stock = 0;
                   this.descripcion = '';
                   this.tipoAccion = 1;
                   break;
@@ -2128,8 +2146,12 @@ __webpack_require__.r(__webpack_exports__);
                   this.modal = 1;
                   this.tituloModal = 'Actualizar Articulo';
                   this.tipoAccion = 2;
-                  this.categoria_id = data['id'];
+                  this.articulo_id = data['id'];
+                  this.idcategoria = data['idcategoria'];
+                  this.codigo = data['codigo'];
                   this.nombre = data['nombre'];
+                  this.stock = data['stock'];
+                  this.precio_venta = data['precio_venta'];
                   this.descripcion = data['descripcion'];
                   break;
                 }
@@ -39231,7 +39253,7 @@ var render = function() {
                         attrs: { type: "button" },
                         on: {
                           click: function($event) {
-                            return _vm.registrarCategoria()
+                            return _vm.registrarArticulo()
                           }
                         }
                       },
@@ -39247,7 +39269,7 @@ var render = function() {
                         attrs: { type: "button" },
                         on: {
                           click: function($event) {
-                            return _vm.actualizarCategoria()
+                            return _vm.actualizarArticulo()
                           }
                         }
                       },

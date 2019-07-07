@@ -155,8 +155,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                        <button type="button" class="btn btn-primary" v-if="tipoAccion==1" @click="registrarCategoria()">Guardar</button>
-                        <button type="button" class="btn btn-success" v-if="tipoAccion==2" @click="actualizarCategoria()">Actualizar</button>
+                        <button type="button" class="btn btn-primary" v-if="tipoAccion==1" @click="registrarArticulo()">Guardar</button>
+                        <button type="button" class="btn btn-success" v-if="tipoAccion==2" @click="actualizarArticulo()">Actualizar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -292,21 +292,26 @@
             },
 
             //
-            registrarCategoria()
+            registrarArticulo()
             {
-                if(this.validarCategoria()){
+                if(this.validarArticulo()){
                     return;
                 }
 
                 let me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
-                axios.post('/categoria/registrar',{
+                axios.post('/articulo/registrar',{
                     // Almacena los nuevos parametros enviados por medio de esta petición
-                    'nombre' : this.nombre,
+                    'idcategoria': this.idcategoria,
+                    'codigo': this.codigo,
+                    'nombre': this.nombre,
+                    'stock': this.stock,
+                    'precio_venta': this.precio_venta,
                     'descripcion' : this.descripcion
+
                 }).then(function(response){
                     //En caso de registrar la categoria, realizara estas dos funciones.
                     me.cerrarModal();
-                    me.listarCategoria(1, '', 'nombre');
+                    me.listarArticulo(1, '', 'nombre');
                 }).catch(function (error){
                     console.log(error)
                 });
@@ -441,25 +446,35 @@
             },
 
             //
-            validarCategoria()
+            validarArticulo()
             {
-                this.errorCategoria = 0;
-                this.errorMostrarMensajeCategoria = [];
+                this.errorArticulo = 0;
+                this.errorMostrarMensajeArticulo = [];
                 //Validaciones
-                if(!this.nombre) this.errorMostrarMensajeCategoria.push("El nombre de la Categoria no puede estar Vacío...");
+                if(this.idcategoria==0) this.errorMostrarMensajeArticulo.push("Seleccione una Categoria");
+                if(!this.nombre) this.errorMostrarMensajeArticulo.push("El nombre del Articulo no puede estar Vacío...");
+                if(!this.stock) this.errorMostrarMensajeArticulo.push("El stock del Articulo debe ser un número y no puede estar Vacío...");
+                if(!this.precio_venta) this.errorMostrarMensajeArticulo.push("El Precio del Articulo debe ser un número y no puede estar Vacío...");
                 // Cuando tiene un error de registro, la variable errorCategoria pasa a 1
-                if(this.errorMostrarMensajeCategoria.length) this.errorCategoria = 1;
+                if(this.errorMostrarMensajeArticulo.length) this.errorArticulo = 1;
 
-                return this.errorCategoria;
+                return this.errorArticulo;
             },
 
             //
             cerrarModal()
             {
-                this.modal=0;
+                this.modal = 0;
                 this.tituloModal = '';
+                this.idcategoria = 0;
+                this.nombre_categoria = '';
+                this.codigo = '';
                 this.nombre = '';
+                this.precio_venta = 0;
+                this.stock = 0;
                 this.descripcion = '';
+                this.errorArticulo = 0;
+
             },
             
             //abrirModal(model, action, data = []){
@@ -475,7 +490,12 @@
                             {
                                 this.modal = 1;
                                 this.tituloModal = 'Registrar Articulo';
+                                this.idcategoria = 0;
+                                this.nombre_categoria = '';
+                                this.codigo = '';
                                 this.nombre = '';
+                                this.precio_venta = '';
+                                this.stock = 0;
                                 this.descripcion = '';
                                 this.tipoAccion = 1;
                                 break;
@@ -486,9 +506,12 @@
                                 this.modal = 1;
                                 this.tituloModal = 'Actualizar Articulo';
                                 this.tipoAccion = 2;
-                                
-                                this.categoria_id = data['id'];
+                                this.articulo_id = data['id']
+                                this.idcategoria = data['idcategoria'];
+                                this.codigo = data['codigo'];
                                 this.nombre = data['nombre'];
+                                this.stock = data['stock'];
+                                this.precio_venta = data['precio_venta'];
                                 this.descripcion = data['descripcion'];
                                 break;
                             }
