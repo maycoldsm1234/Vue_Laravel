@@ -61,12 +61,30 @@
 
 [*] Axios Permite realizar peticiones Http desde el navegador y retorna archivos Json
 
+[*] Vue BarCode
+    npm install vue-barcode
+        adicional importamos su componente
+        import VueBarcode from 'vue-barcode';
+            en el script del componente que necesitemos utilizarlo...
+            EJM:
+            <template>
+                <main></main>
+            <template>
+            <script>
+                import VueBarcode from 'vue-barcode';
+                    export default {
+                        data(){
+                        },
+                        components: {
+                            'barcode' : VueBarcode
+                        }
+                    }
 
-[*] 
-
-
-[*] 
-
+            </script>
+            
+            para este momento, ya es solo agregar la etiqueta barcode donde deseemos que se visualice.
+[*] Ejecución automatica de compilaciones en Vue...
+    npm run watch
 
 [*] 
 
