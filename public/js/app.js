@@ -1868,7 +1868,8 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     // Listar datos en la vista Categoria
     listarCategoria: function listarCategoria() {
-      var me = this;
+      var me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
+
       axios.get('/categoria').then(function (response) {
         // Almacenamos todos los datos Recibidos en un Array "arrayCategoria"
         // Recibiendo todos los datos enviados desde la vista /categoria
@@ -1878,7 +1879,21 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    registrarCategoria: function registrarCategoria() {},
+    registrarCategoria: function registrarCategoria() {
+      var me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
+
+      axios.post('/categoria/registrar', {
+        // Almacena los nuevos parametros enviados por medio de esta petición
+        'nombre': this.nombre,
+        'descripcion': this.descripcion
+      }).then(function (response) {
+        //En caso de registrar la categoria, realizara estas dos funciones.
+        me.cerrarModal();
+        me.listarCategoria();
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
     cerrarModal: function cerrarModal() {
       this.modal = 0;
       this.tituloModal = '';
@@ -38067,7 +38082,10 @@ var render = function() {
                             }
                           ],
                           staticClass: "form-control",
-                          attrs: { type: "email", placeholder: "Enter Email" },
+                          attrs: {
+                            type: "email",
+                            placeholder: "Ingrese Descripción"
+                          },
                           domProps: { value: _vm.descripcion },
                           on: {
                             input: function($event) {
@@ -38104,7 +38122,12 @@ var render = function() {
                       "button",
                       {
                         staticClass: "btn btn-primary",
-                        attrs: { type: "button" }
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.registrarCategoria()
+                          }
+                        }
                       },
                       [_vm._v("Guardar")]
                     )
@@ -38114,7 +38137,7 @@ var render = function() {
                   ? _c(
                       "button",
                       {
-                        staticClass: "btn btn-primary",
+                        staticClass: "btn btn-success",
                         attrs: { type: "button" }
                       },
                       [_vm._v("Actualizar")]

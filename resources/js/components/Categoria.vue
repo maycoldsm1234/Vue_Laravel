@@ -111,15 +111,15 @@
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="email-input">Descripción</label>
                                 <div class="col-md-9">
-                                    <input type="email" v-model="descripcion" class="form-control" placeholder="Enter Email">
+                                    <input type="email" v-model="descripcion" class="form-control" placeholder="Ingrese Descripción">
                                 </div>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" @click="cerrarModal()" class="btn btn-secondary">Cerrar</button>
-                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary">Guardar</button>
-                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary">Actualizar</button>
+                        <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
+                        <button type="button" class="btn btn-primary" v-if="tipoAccion==1" @click="registrarCategoria()">Guardar</button>
+                        <button type="button" class="btn btn-success" v-if="tipoAccion==2">Actualizar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -168,7 +168,7 @@
         methods : {
             // Listar datos en la vista Categoria
             listarCategoria(){
-                let me = this; 
+                let me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
                 axios.get('/categoria').then(function(response){
                     // Almacenamos todos los datos Recibidos en un Array "arrayCategoria"
                     // Recibiendo todos los datos enviados desde la vista /categoria
@@ -182,6 +182,18 @@
             
             registrarCategoria()
             {
+                let me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
+                axios.post('/categoria/registrar',{
+                    // Almacena los nuevos parametros enviados por medio de esta petición
+                    'nombre' : this.nombre,
+                    'descripcion' : this.descripcion
+                }).then(function(response){
+                    //En caso de registrar la categoria, realizara estas dos funciones.
+                    me.cerrarModal();
+                    me.listarCategoria();
+                }).catch(function (error){
+                    console.log(error)
+                });
 
             },
 
