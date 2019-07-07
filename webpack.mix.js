@@ -23,7 +23,8 @@ mix.scripts([
     'resources/plantilla/js/jquery.min.js',
     'resources/plantilla/js/pace.min.js',
     'resources/plantilla/js/popper.min.js',
-    'resources/plantilla/js/template.js'
+    'resources/plantilla/js/template.js',
+    'resources/plantilla/js/sweetalert.all.js'
 ], 'public/js/plantilla.js');
 
 mix.js(['resources/js/app.js'
