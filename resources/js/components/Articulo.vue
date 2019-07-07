@@ -2,13 +2,14 @@
     <main class="main">
         <!-- Breadcrumb -->
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/">Escritorio</a></li>        </ol>
+            <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
+        </ol>
         <div class="container-fluid">
             <!-- Ejemplo de tabla Listado -->
             <div class="card">
                 <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Categorías
-                    <button type="button" class="btn btn-success" @click="abrirModal('categoria','registrar')">
+                    <i class="fa fa-align-justify"></i> Articulos
+                    <button type="button" class="btn btn-success" @click="abrirModal('articulo','registrar')">
                         <i class="icon-plus"></i>&nbsp;Nuevo
                     </button>
                 </div>
@@ -20,8 +21,8 @@
                                 <option value="nombre">Nombre</option>
                                 <option value="descripcion">Descripción</option>
                                 </select>
-                                <input type="text" v-model="buscar" @keyup.enter="listarCategoria(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
-                                <button type="submit" class="btn btn-primary" @click="listarCategoria(1,buscar,criterio)"><i class="fa fa-search"></i> Buscar</button>
+                                <input type="text" v-model="buscar" @keyup.enter="listarArticulo(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
+                                <button type="submit" class="btn btn-primary" @click="listarArticulo(1,buscar,criterio)"><i class="fa fa-search"></i> Buscar</button>
                             </div>
                         </div>
                     </div>
@@ -29,32 +30,40 @@
                         <thead>
                             <tr>
                                 <th>Opciones</th>
+                                <th>Código</th>
                                 <th>Nombre</th>
+                                <th>Categoría</th>
+                                <th>Precio Venta</th>
+                                <th>Stock</th>
                                 <th>Descripción</th>
                                 <th>Estado</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="categoria in arrayCategoria" :key="categoria.id">
+                            <tr v-for="articulo in arrayArticulo" :key="articulo.id">
                                 <td>
-                                    <button type="button" class="btn btn-warning btn-sm" @click="abrirModal('categoria','actualizar', categoria)">
+                                    <button type="button" class="btn btn-warning btn-sm" @click="abrirModal('articulo','actualizar', articulo)">
                                     <i class="icon-pencil"></i>
                                     </button> &nbsp;
-                                    <template v-if="categoria.condicion">
-                                        <button type="button" class="btn btn-danger btn-sm" @click="desactivarCategoria(categoria.id)">
+                                    <template v-if="articulo.condicion">
+                                        <button type="button" class="btn btn-danger btn-sm" @click="desactivarCategoria(articulo.id)">
                                         <i class="icon-trash"></i>
                                         </button>
                                     </template>
                                     <template v-else>
-                                        <button type="button" class="btn btn-info btn-sm" @click="activarCategoria(categoria.id)">
+                                        <button type="button" class="btn btn-info btn-sm" @click="activarCategoria(articulo.id)">
                                         <i class="icon-check"></i>
                                         </button>
                                     </template>
                                 </td>
-                                <td v-text="categoria.nombre"></td>
-                                <td v-text="categoria.descripcion"></td>
+                                <td v-text="articulo.codigo"></td>
+                                <td v-text="articulo.nombre"></td>
+                                <td v-text="articulo.nombre_categoria"></td>
+                                <td v-text="articulo.precio_venta"></td>
+                                <td v-text="articulo.stock"></td>
+                                <td v-text="articulo.descripcion"></td>
                                 <td>
-                                    <div v-if="categoria.condicion">
+                                    <div v-if="articulo.condicion">
                                         <span class="badge badge-success">Activo</span>
                                     </div>
                                     <div v-else>
@@ -136,21 +145,27 @@
     </main>
 </template>
 
+
 <script>
     export default 
     {
         data ()
         {
             return {
-                categoria_id : 0, // Obtenemos el ID de la Categoria a Actualizar
+                articulo_id : 0,
+                idcategoria : 0,
+                nombre_categoria : '',
+                codigo : '',
                 nombre : '',
+                precio_venta : 0,
+                stock : 0,
                 descripcion : '',
-                arrayCategoria : [],
-                modal : 0, // Valida 0 si no esta abierto el modal de crear registro y 1 si esta abierto dicho modal
-                tituloModal : '', // Genera titulo de la vista dinamico
-                tipoAccion : 0, // condición para mostrar boton guardar o actualizar.
-                errorCategoria : 0,
-                errorMostrarMensajeCategoria : [],
+                arrayArticulo: [],
+                modal : 0,
+                tituloModal : '',
+                tipoAccion : 0,
+                errorArticulo : 0,
+                errorMostrarMensajeArticulo : [],
                 // Propiedades para la paginación
                 pagination : {
                     'total' : 0,
@@ -203,15 +218,15 @@
         methods : 
         {
             // Listar datos en la vista Categoria
-            listarCategoria(page, buscar, criterio){
+            listarArticulo(page, buscar, criterio){
                 let me = this;
-                var url = '/categoria?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
+                var url = '/articulo?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
                 axios.get(url).then(function(response){
 
                     // Almacenamos todos los datos Recibidos en un Array "arrayCategoria"
                     // Recibiendo todos los datos enviados desde la vista /categoria
                     var respuesta = response.data;
-                    me.arrayCategoria = respuesta.categorias.data;
+                    me.arrayArticulo = respuesta.articulos.data;
                     me.pagination = respuesta.pagination;
                     //console.log(response);
                 })
@@ -227,7 +242,7 @@
                 // Actualiza la pagina Actual
                 me.pagination.current_page = page;
                 // Envia la petición para visualizar la data de la pagina
-                me.listarCategoria(page,buscar,criterio);
+                me.listarArticulo(page,buscar,criterio);
 
             },
 
@@ -438,7 +453,7 @@
             }
         },
         mounted() {
-            this.listarCategoria(1,this.buscar,this.criterio);
+            this.listarArticulo(1,this.buscar,this.criterio);
         }
     }
 </script>
