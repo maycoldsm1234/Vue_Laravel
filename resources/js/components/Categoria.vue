@@ -126,7 +126,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
                         <button type="button" class="btn btn-primary" v-if="tipoAccion==1" @click="registrarCategoria()">Guardar</button>
-                        <button type="button" class="btn btn-success" v-if="tipoAccion==2">Actualizar</button>
+                        <button type="button" class="btn btn-success" v-if="tipoAccion==2" @click="actualizarCategoria()">Actualizar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -164,6 +164,7 @@
     export default {
         data (){
             return {
+                categoria_id : 0, // Obtenemos el ID de la Categoria a Actualizar
                 nombre : '',
                 descripcion : '',
                 arrayCategoria : [],
@@ -195,12 +196,34 @@
                     return;
                 }
 
-
                 let me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
                 axios.post('/categoria/registrar',{
                     // Almacena los nuevos parametros enviados por medio de esta petición
                     'nombre' : this.nombre,
                     'descripcion' : this.descripcion
+                }).then(function(response){
+                    //En caso de registrar la categoria, realizara estas dos funciones.
+                    me.cerrarModal();
+                    me.listarCategoria();
+                }).catch(function (error){
+                    console.log(error)
+                });
+
+            },
+        
+            actualizarCategoria()
+            {
+                  if(this.validarCategoria()){
+                    return;
+                }
+
+                let me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
+                axios.put('/categoria/actualizar',{
+                    // Almacena los nuevos parametros enviados por medio de esta petición
+                    'nombre' : this.nombre,
+                    'descripcion' : this.descripcion,
+                    'id' : this.categoria_id
+
                 }).then(function(response){
                     //En caso de registrar la categoria, realizara estas dos funciones.
                     me.cerrarModal();
@@ -243,7 +266,7 @@
                             case 'registrar':
                             {
                                 this.modal = 1;
-                                this.tituloModal = '';
+                                this.tituloModal = 'Registrar Categoría';
                                 this.nombre = '';
                                 this.descripcion = '';
                                 this.tipoAccion = 1;
@@ -251,7 +274,15 @@
                             }
                             case 'actualizar':
                             {
-
+                                // console.log(data);
+                                this.modal = 1;
+                                this.tituloModal = 'Actualizar Categoria';
+                                this.tipoAccion = 2;
+                                
+                                this.categoria_id = data['id'];
+                                this.nombre = data['nombre'];
+                                this.descripcion = data['descripcion'];
+                                break;
                             }
                         }
                     }

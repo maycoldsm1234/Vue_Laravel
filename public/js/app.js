@@ -1862,6 +1862,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      categoria_id: 0,
+      // Obtenemos el ID de la Categoria a Actualizar
       nombre: '',
       descripcion: '',
       arrayCategoria: [],
@@ -1908,6 +1910,26 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
+    actualizarCategoria: function actualizarCategoria() {
+      if (this.validarCategoria()) {
+        return;
+      }
+
+      var me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
+
+      axios.put('/categoria/actualizar', {
+        // Almacena los nuevos parametros enviados por medio de esta petición
+        'nombre': this.nombre,
+        'descripcion': this.descripcion,
+        'id': this.categoria_id
+      }).then(function (response) {
+        //En caso de registrar la categoria, realizara estas dos funciones.
+        me.cerrarModal();
+        me.listarCategoria();
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
     validarCategoria: function validarCategoria() {
       this.errorCategoria = 0;
       this.errorMostrarMensajeCategoria = []; //Validaciones
@@ -1934,7 +1956,7 @@ __webpack_require__.r(__webpack_exports__);
               case 'registrar':
                 {
                   this.modal = 1;
-                  this.tituloModal = '';
+                  this.tituloModal = 'Registrar Categoría';
                   this.nombre = '';
                   this.descripcion = '';
                   this.tipoAccion = 1;
@@ -1942,7 +1964,16 @@ __webpack_require__.r(__webpack_exports__);
                 }
 
               case 'actualizar':
-                {}
+                {
+                  // console.log(data);
+                  this.modal = 1;
+                  this.tituloModal = 'Actualizar Categoria';
+                  this.tipoAccion = 2;
+                  this.categoria_id = data['id'];
+                  this.nombre = data['nombre'];
+                  this.descripcion = data['descripcion'];
+                  break;
+                }
             }
           }
       }
@@ -38187,7 +38218,12 @@ var render = function() {
                       "button",
                       {
                         staticClass: "btn btn-success",
-                        attrs: { type: "button" }
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.actualizarCategoria()
+                          }
+                        }
                       },
                       [_vm._v("Actualizar")]
                     )
