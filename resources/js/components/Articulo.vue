@@ -46,12 +46,12 @@
                                     <i class="icon-pencil"></i>
                                     </button> &nbsp;
                                     <template v-if="articulo.condicion">
-                                        <button type="button" class="btn btn-danger btn-sm" @click="desactivarCategoria(articulo.id)">
+                                        <button type="button" class="btn btn-danger btn-sm" @click="desactivarArticulo(articulo.id)">
                                         <i class="icon-trash"></i>
                                         </button>
                                     </template>
                                     <template v-else>
-                                        <button type="button" class="btn btn-info btn-sm" @click="activarCategoria(articulo.id)">
+                                        <button type="button" class="btn btn-info btn-sm" @click="activarArticulo(articulo.id)">
                                         <i class="icon-check"></i>
                                         </button>
                                     </template>
@@ -348,7 +348,7 @@
             },
 
             //
-            desactivarCategoria(id)
+            desactivarArticulo(id)
             {
                 const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
@@ -359,7 +359,7 @@
                 })
 
                 swalWithBootstrapButtons.fire({
-                title: 'Estas seguro de desactivar esta categoria?',
+                title: 'Estas seguro de desactivar este Articulo?',
                 text: "Por favor confirma si es correcto...",
                 type: 'warning',
                 showCancelButton: true,
@@ -369,11 +369,11 @@
                 }).then((result) => {
                 if (result.value) {
                     let me = this; 
-                    axios.put('/categoria/desactivar',{
+                    axios.put('/articulo/desactivar',{
                         'id' : id
 
                     }).then(function(response){
-                        me.listarCategoria(1, '', 'nombre');
+                        me.listarArticulo(1, '', 'nombre');
 
                         //  Evento que se ejecuta después de Actualizar la columna Condición.    
                         swalWithBootstrapButtons.fire(
@@ -399,9 +399,8 @@
             },
 
             //
-            activarCategoria(id)
+            activarArticulo(id)
             {
-
                 const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                     confirmButton: 'btn btn-success',
@@ -411,7 +410,7 @@
                 })
 
                 swalWithBootstrapButtons.fire({
-                title: 'Estas seguro de Activar esta categoria?',
+                title: 'Estas seguro de Activar este Articulo?',
                 text: "Por favor confirma si es correcto...",
                 type: 'warning',
                 showCancelButton: true,
@@ -421,11 +420,11 @@
                 }).then((result) => {
                 if (result.value) {
                     let me = this; 
-                    axios.put('/categoria/activar',{
+                    axios.put('/articulo/activar',{
                         'id' : id
 
                     }).then(function(response){
-                        me.listarCategoria(1, '', 'nombre');
+                        me.listarArticulo(1, '', 'nombre');
 
                         //  Evento que se ejecuta después de Actualizar la columna Condición.    
                         swalWithBootstrapButtons.fire(

@@ -89,7 +89,7 @@ class ArticuloController extends Controller
         $articulo->descripcion = $request->input('descripcion');
         $articulo->condicion = '1';
         $articulo->save();
-        
+
     }
 
     /**
@@ -133,7 +133,7 @@ class ArticuloController extends Controller
         //
         if (!$request->ajax()) return redirect('/');
         
-        $articulo = Categoria::findOrFail($request->id);
+        $articulo = Articulo::findOrFail($request->id);
         $articulo->condicion = '1';
         $articulo->save();
     }
