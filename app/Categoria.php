@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Articulo;
 
 class Categoria extends Model
 {
@@ -11,4 +12,8 @@ class Categoria extends Model
     //protected $primaryKey = 'id';
     protected $fillable = ['nombre','descripcion','condicion'];
     
+    public function articulos()
+    {
+        return $this->hasMany(Articulo::class);
+    }
 }
