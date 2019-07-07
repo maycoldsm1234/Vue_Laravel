@@ -16,9 +16,19 @@ class CategoriaController extends Controller
     public function index(Request $request)
     {
         // Solo permite realizar peticiones Ajax, si se ingresa la URL redirecciona a la ruta Raiz
-        // if (!$request->ajax()) return redirect('/');
+        if (!$request->ajax()) return redirect('/');
         
-        $categorias = Categoria::paginate(3);
+        $buscar = $request->buscar;
+        $criterio = $request->criterio;
+
+        if($buscar=='')
+        {
+            $categorias = Categoria::orderBy('id','desc')->paginate(3);
+        }
+        else
+        {
+            $categorias = Categoria::where($criterio , 'like', '%' . $buscar . '%')->orderBy('id','desc')->paginate(3); 
+        }
 
         return [
             'pagination' => [
