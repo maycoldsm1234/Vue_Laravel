@@ -195,6 +195,7 @@
                     return;
                 }
 
+
                 let me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
                 axios.post('/categoria/registrar',{
                     // Almacena los nuevos parametros enviados por medio de esta petición
