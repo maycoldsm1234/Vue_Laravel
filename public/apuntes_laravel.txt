@@ -46,6 +46,7 @@
 		Editar una migración existente
 		php artisan make:migration nombre_migracion_ --table [nombreTable]
 		php artisan make:migration add_created_at_index_to_messages_table --table messages
+		php artisan make:migratrion create_articulos_table
 		-- 
 		Para este caso en el esquema de esta migración en el metodo UP
 		 	$table->index('created_at');
