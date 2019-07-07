@@ -44,6 +44,20 @@ class CategoriaController extends Controller
         ];
     }
 
+        /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function selectCategoria(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+        // Extrae todas las categorias siempre y cuando su condición sea igual a 1 y las retorna
+        $categorias = Categoria::where('condicion','=','1')
+        ->select('id','nombre')->orderBy('nombre','asc')->get();
+
+        return ['categorias' => $categorias];
+    }
 
     /**
      * Store a newly created resource in storage.

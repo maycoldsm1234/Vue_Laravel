@@ -105,9 +105,36 @@
                     <div class="modal-body">
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                             <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Categoria</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" v-model="idcategoria">
+                                        <option value="0" disabled>Seleccione</option>
+                                        <option v-for="categoria in arrayCategoria" :key="categoria.id" :value="categoria.id" v-text="categoria.nombre"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Código</label>
+                                <div class="col-md-9">
+                                    <input type="text" v-model="codigo" class="form-control" placeholder="Código de Barras">
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                                 <div class="col-md-9">
                                     <input type="text" v-model="nombre" class="form-control" placeholder="Nombre de categoría">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Precio Veenta</label>
+                                <div class="col-md-9">
+                                    <input type="text" v-model="precio_venta" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Stock</label>
+                                <div class="col-md-9">
+                                    <input type="text" v-model="stock" class="form-control" placeholder="">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -116,9 +143,9 @@
                                     <input type="email" v-model="descripcion" class="form-control" placeholder="Ingrese Descripción">
                                 </div>
                             </div>
-                            <div v-show="errorCategoria" class="form-group row div-error">
+                            <div v-show="errorArticulo" class="form-group row div-error">
                                 <div class="text-center text-error">
-                                    <div v-for="error in errorMostrarMensajeCategoria" :key="error" v-text="error">
+                                    <div v-for="error in errorMostrarMensajeArticulo" :key="error" v-text="error">
 
                                     </div>
                                 </div>
@@ -177,7 +204,8 @@
                 },
                 offset : 3,
                 criterio : 'nombre',
-                buscar : '' 
+                buscar : '',
+                arrayCategoria : []
             }
         },
         computed : {
@@ -235,6 +263,23 @@
                 });
             },
             
+            //
+            selectCategoria()
+            {
+                let me = this;
+                var url = '/categoria/selectCategoria';
+                axios.get(url).then(function(response){
+
+                    // Almacenamos todos los datos Recibidos en un Array "arrayCategoria"
+                    // Recibiendo todos los datos enviados desde la vista /categoria
+                    var respuesta = response.data;
+                    me.arrayCategoria = respuesta.categorias;
+                    //console.log(response);
+                })
+                .catch(function(error){
+                    console.log(error);
+                });
+            },
             //
             cambiarPagina(page, buscar, criterio)
             {
@@ -422,14 +467,14 @@
             {
                 switch(modelo)
                 {
-                    case "categoria":
+                    case "articulo":
                     {
                         switch(accion)
                         {
                             case 'registrar':
                             {
                                 this.modal = 1;
-                                this.tituloModal = 'Registrar Categoría';
+                                this.tituloModal = 'Registrar Articulo';
                                 this.nombre = '';
                                 this.descripcion = '';
                                 this.tipoAccion = 1;
@@ -439,7 +484,7 @@
                             {
                                 // console.log(data);
                                 this.modal = 1;
-                                this.tituloModal = 'Actualizar Categoria';
+                                this.tituloModal = 'Actualizar Articulo';
                                 this.tipoAccion = 2;
                                 
                                 this.categoria_id = data['id'];
@@ -450,6 +495,7 @@
                         }
                     }
                 }
+                this.selectCategoria();
             }
         },
         mounted() {
