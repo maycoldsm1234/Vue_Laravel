@@ -1852,6 +1852,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1862,7 +1869,10 @@ __webpack_require__.r(__webpack_exports__);
       // Valida 0 si no esta abierto el modal de crear registro y 1 si esta abierto dicho modal
       tituloModal: '',
       // Genera titulo de la vista dinamico
-      tipoAccion: 0
+      tipoAccion: 0,
+      // condición para mostrar boton guardar o actualizar.
+      errorCategoria: 0,
+      errorMostrarMensajeCategoria: []
     };
   },
   methods: {
@@ -1880,6 +1890,10 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     registrarCategoria: function registrarCategoria() {
+      if (this.validarCategoria()) {
+        return;
+      }
+
       var me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
 
       axios.post('/categoria/registrar', {
@@ -1893,6 +1907,15 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error);
       });
+    },
+    validarCategoria: function validarCategoria() {
+      this.errorCategoria = 0;
+      this.errorMostrarMensajeCategoria = []; //Validaciones
+
+      if (!this.nombre) this.errorMostrarMensajeCategoria.push("El nombre de la Categoria no puede estar Vacío..."); // Cuando tiene un error de registro, la variable errorCategoria pasa a 1
+
+      if (this.errorMostrarMensajeCategoria.length) this.errorCategoria = 1;
+      return this.errorCategoria;
     },
     cerrarModal: function cerrarModal() {
       this.modal = 0;
@@ -6389,7 +6412,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.modal-content\n{\n    width: 100% !important;\n    position: absolute !important;\n}\n.mostrar\n{\n    display: list-item !important;\n    opacity: 1 !important;\n    position: absolute !important;\n    background-color: #3c29297a;\n}\n", ""]);
+exports.push([module.i, "\n.modal-content\n{\n    width: 100% !important;\n    position: absolute !important;\n}\n.mostrar\n{\n    display: list-item !important;\n    opacity: 1 !important;\n    position: absolute !important;\n    background-color: #3c29297a;\n}\n.div-error\n{\n    display: flex;\n    justify-content: center;\n}\n.text-error\n{\n    color: red !important;\n    font-weight: bold;\n}\n\n", ""]);
 
 // exports
 
@@ -38053,11 +38076,7 @@ var render = function() {
                               _vm.nombre = $event.target.value
                             }
                           }
-                        }),
-                        _vm._v(" "),
-                        _c("span", { staticClass: "help-block" }, [
-                          _vm._v("(*) Ingrese el nombre de la categoría")
-                        ])
+                        })
                       ])
                     ]),
                     _vm._v(" "),
@@ -38097,7 +38116,37 @@ var render = function() {
                           }
                         })
                       ])
-                    ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.errorCategoria,
+                            expression: "errorCategoria"
+                          }
+                        ],
+                        staticClass: "form-group row div-error"
+                      },
+                      [
+                        _c(
+                          "div",
+                          { staticClass: "text-center text-error" },
+                          _vm._l(_vm.errorMostrarMensajeCategoria, function(
+                            error
+                          ) {
+                            return _c("div", {
+                              key: error,
+                              domProps: { textContent: _vm._s(error) }
+                            })
+                          }),
+                          0
+                        )
+                      ]
+                    )
                   ]
                 )
               ]),

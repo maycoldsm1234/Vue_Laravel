@@ -105,7 +105,6 @@
                                 <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                                 <div class="col-md-9">
                                     <input type="text" v-model="nombre" class="form-control" placeholder="Nombre de categoría">
-                                    <span class="help-block">(*) Ingrese el nombre de la categoría</span>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -113,6 +112,14 @@
                                 <div class="col-md-9">
                                     <input type="email" v-model="descripcion" class="form-control" placeholder="Ingrese Descripción">
                                 </div>
+                            </div>
+                            <div v-show="errorCategoria" class="form-group row div-error">
+                                <div class="text-center text-error">
+                                    <div v-for="error in errorMostrarMensajeCategoria" :key="error" v-text="error">
+
+                                    </div>
+                                </div>
+
                             </div>
                         </form>
                     </div>
@@ -162,7 +169,9 @@
                 arrayCategoria : [],
                 modal : 0, // Valida 0 si no esta abierto el modal de crear registro y 1 si esta abierto dicho modal
                 tituloModal : '', // Genera titulo de la vista dinamico
-                tipoAccion : 0
+                tipoAccion : 0, // condición para mostrar boton guardar o actualizar.
+                errorCategoria : 0,
+                errorMostrarMensajeCategoria : []
             }
         },
         methods : {
@@ -182,6 +191,10 @@
             
             registrarCategoria()
             {
+                if(this.validarCategoria()){
+                    return;
+                }
+
                 let me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
                 axios.post('/categoria/registrar',{
                     // Almacena los nuevos parametros enviados por medio de esta petición
@@ -195,6 +208,18 @@
                     console.log(error)
                 });
 
+            },
+
+            validarCategoria()
+            {
+                this.errorCategoria = 0;
+                this.errorMostrarMensajeCategoria = [];
+                //Validaciones
+                if(!this.nombre) this.errorMostrarMensajeCategoria.push("El nombre de la Categoria no puede estar Vacío...");
+                // Cuando tiene un error de registro, la variable errorCategoria pasa a 1
+                if(this.errorMostrarMensajeCategoria.length) this.errorCategoria = 1;
+
+                return this.errorCategoria;
             },
 
             cerrarModal()
@@ -252,4 +277,16 @@
         background-color: #3c29297a;
 
     }
+    .div-error
+    {
+        display: flex;
+        justify-content: center;
+
+    }
+    .text-error
+    {
+        color: red !important;
+        font-weight: bold;  
+    }
+
 </style>
