@@ -90,13 +90,42 @@
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                                 <div class="col-md-9">
-                                    <input type="text" v-model="nombre" class="form-control" placeholder="Nombre de categoría">
+                                    <input type="text" v-model="nombre" class="form-control" placeholder="Nombre Completo">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="email-input">Descripción</label>
+                                <label class="col-md-3 form-control-label" for="email-input">Tipo Documento</label>
                                 <div class="col-md-9">
-                                    <input type="email" v-model="descripcion" class="form-control" placeholder="Ingrese Descripción">
+                                    <select v-model="tipo_documento" class="form-control">
+                                        <option value="CC">CC</option>
+                                        <option value="PASS">PASS</option>
+                                        <option value="DNI">DNI</option>
+                                    </select>
+                                    
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="email-input">Número Documento</label>
+                                <div class="col-md-9">
+                                    <input type="text" v-model="num_documento" class="form-control" placeholder="Ingrese Número Doc">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="email-input">Dirección</label>
+                                <div class="col-md-9">
+                                    <input type="text" v-model="direccion" class="form-control" placeholder="Ingrese Dirección">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="email-input">Telefono</label>
+                                <div class="col-md-9">
+                                    <input type="text" v-model="telefono" class="form-control" placeholder="Ingrese Telefono">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="email-input">Email</label>
+                                <div class="col-md-9">
+                                    <input type="email" v-model="email" class="form-control" placeholder="Ingrese Email">
                                 </div>
                             </div>
                             <div v-show="errorCategoria" class="form-group row div-error">
@@ -110,9 +139,9 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                        <button type="button" class="btn btn-primary" v-if="tipoAccion==1" @click="registrarCategoria()">Guardar</button>
-                        <button type="button" class="btn btn-success" v-if="tipoAccion==2" @click="actualizarCategoria()">Actualizar</button>
+                        <button type="button" class="btn btn-danger" @click="cerrarModal()">Cerrar</button>
+                        <button type="button" class="btn btn-primary" v-if="tipoAccion==1" @click="registrarPersona()">Guardar</button>
+                        <button type="button" class="btn btn-success" v-if="tipoAccion==2" @click="actualizarPersona()">Actualizar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -228,21 +257,25 @@
             },
 
             //
-            registrarCategoria()
+            registrarPersona()
             {
-                if(this.validarCategoria()){
+                if(this.validarPersona()){
                     return;
                 }
 
                 let me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
-                axios.post('/categoria/registrar',{
+                axios.post('/cliente/registrar',{
                     // Almacena los nuevos parametros enviados por medio de esta petición
                     'nombre' : this.nombre,
-                    'descripcion' : this.descripcion
+                    'tipo_documento' : this.tipo_documento,
+                    'num_documento' : this.num_documento,
+                    'direccion' : this.direccion,
+                    'telefono' : this.telefono,
+                    'email' : this.email
                 }).then(function(response){
                     //En caso de registrar la categoria, realizara estas dos funciones.
                     me.cerrarModal();
-                    me.listarCategoria(1, '', 'nombre');
+                    me.listarPersona(1, '', 'nombre');
                 }).catch(function (error){
                     console.log(error)
                 });
@@ -250,23 +283,27 @@
             },
         
             //
-            actualizarCategoria()
+            actualizarPersona()
             {
-                  if(this.validarCategoria()){
+                  if(this.validarPersona()){
                     return;
                 }
 
                 let me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
-                axios.put('/categoria/actualizar',{
+                axios.put('/cliente/actualizar',{
                     // Almacena los nuevos parametros enviados por medio de esta petición
                     'nombre' : this.nombre,
-                    'descripcion' : this.descripcion,
-                    'id' : this.categoria_id
+                    'tipo_documento' : this.tipo_documento,
+                    'num_documento' : this.num_documento,
+                    'direccion' : this.direccion,
+                    'telefono' : this.telefono,
+                    'email' : this.email,
+                    'id' : this.persona_id
 
                 }).then(function(response){
                     //En caso de registrar la categoria, realizara estas dos funciones.
                     me.cerrarModal();
-                    me.listarCategoria(1,'','nombre');
+                    me.listarPersona(1,'','nombre');
                 }).catch(function (error){
                     console.log(error)
                 });
@@ -275,16 +312,16 @@
 
           
             //
-            validarCategoria()
+            validarPersona()
             {
-                this.errorCategoria = 0;
-                this.errorMostrarMensajeCategoria = [];
+                this.errorPersona = 0;
+                this.errorMostrarMensajePersona = [];
                 //Validaciones
-                if(!this.nombre) this.errorMostrarMensajeCategoria.push("El nombre de la Categoria no puede estar Vacío...");
+                if(!this.nombre) this.errorMostrarMensajePersona.push("El nombre de la Persona no puede estar Vacío...");
                 // Cuando tiene un error de registro, la variable errorCategoria pasa a 1
-                if(this.errorMostrarMensajeCategoria.length) this.errorCategoria = 1;
+                if(this.errorMostrarMensajePersona.length) this.errorPersona = 1;
 
-                return this.errorCategoria;
+                return this.errorPersona;
             },
 
             //
@@ -293,7 +330,11 @@
                 this.modal=0;
                 this.tituloModal = '';
                 this.nombre = '';
-                this.descripcion = '';
+                this.tipo_documento = '';
+                this.num_documento = '';
+                this.direccion = '';
+                this.telefono = '';
+                this.email = '';
             },
             
             //abrirModal(model, action, data = []){
@@ -310,7 +351,11 @@
                                 this.modal = 1;
                                 this.tituloModal = 'Registrar Persona';
                                 this.nombre = '';
-                                this.descripcion = '';
+                                this.tipo_documento = 'DNI';
+                                this.num_documento = '';
+                                this.direccion = '';
+                                this.telefono = '';
+                                this.email = '';
                                 this.tipoAccion = 1;
                                 break;
                             }
@@ -318,12 +363,16 @@
                             {
                                 // console.log(data);
                                 this.modal = 1;
-                                this.tituloModal = 'Actualizar Categoria';
+                                this.tituloModal = 'Actualizar Persona';
                                 this.tipoAccion = 2;
                                 
-                                this.categoria_id = data['id'];
+                                this.persona_id = data['id'];
                                 this.nombre = data['nombre'];
-                                this.descripcion = data['descripcion'];
+                                this.tipo_documento = data['tipo_documento'];
+                                this.num_documento = data['num_documento'];
+                                this.direccion = data['direccion'];
+                                this.telefono = data['telefono'];
+                                this.email = data['email'];
                                 break;
                             }
                         }
