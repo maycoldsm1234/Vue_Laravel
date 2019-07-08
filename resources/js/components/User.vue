@@ -48,6 +48,17 @@
                                     <button type="button" class="btn btn-warning btn-sm" @click="abrirModal('persona','actualizar', persona)">
                                     <i class="icon-pencil"></i>
                                     </button> &nbsp;
+                                    <template v-if="persona.condicion">
+                                        <button type="button" class="btn btn-danger btn-sm" @click="desactivarUsuario(persona.id)">
+                                        <i class="icon-trash"></i>
+                                        </button>
+                                    </template>
+                                    <template v-else>
+                                        <button type="button" class="btn btn-info btn-sm" @click="activarUsuario(persona.id)">
+                                        <i class="icon-check"></i>
+                                        </button>
+                                    </template>
+                                
                                 </td>
                                 <td v-text="persona.nombre"></td>
                                 <td v-text="persona.tipo_documento"></td>
@@ -360,6 +371,109 @@
                     console.log(error)
                 });
 
+            },
+
+            //
+            desactivarUsuario(id)
+            {
+                const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false,
+                })
+
+                swalWithBootstrapButtons.fire({
+                title: 'Estas seguro de desactivar este Usuario?',
+                text: "Por favor confirma si es correcto...",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Aceptar',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true
+                }).then((result) => {
+                if (result.value) {
+                    let me = this; 
+                    axios.put('/user/desactivar',{
+                        'id' : id
+
+                    }).then(function(response){
+                        me.listarPersona(1, '', 'nombre');
+
+                        //  Evento que se ejecuta después de Actualizar la columna Condición.    
+                        swalWithBootstrapButtons.fire(
+                        'Desactivado!',
+                        'El registro ha sido desactivado Exitosamente.',
+                        'success'
+                        )
+                    }).catch(function (error){
+                        console.log(error)
+                    });
+
+                } else if (
+                    // Read more about handling dismissals  
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                    'Cancelled',
+                    'Your imaginary file is safe :)',
+                    'error'
+                    )
+                }
+                })
+            },
+
+            //
+            activarUsuario(id)
+            {
+
+                const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false,
+                })
+
+                swalWithBootstrapButtons.fire({
+                title: 'Estas seguro de Activar este Usuario?',
+                text: "Por favor confirma si es correcto...",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Aceptar',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true
+                }).then((result) => {
+                if (result.value) {
+                    let me = this; 
+                    axios.put('/user/activar',{
+                        'id' : id
+
+                    }).then(function(response){
+                        me.listarPersona(1, '', 'nombre');
+
+                        //  Evento que se ejecuta después de Actualizar la columna Condición.    
+                        swalWithBootstrapButtons.fire(
+                        'Activado!',
+                        'El registro ha sido Activado Exitosamente.',
+                        'success'
+                        )
+                    }).catch(function (error){
+                        console.log(error)
+                    });
+
+                } else if (
+                    // Read more about handling dismissals  
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                    'Cancelled',
+                    'Your imaginary file is safe :)',
+                    'error'
+                    )
+                }
+                })
             },
 
           
