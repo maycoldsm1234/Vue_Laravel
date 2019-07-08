@@ -100,6 +100,7 @@
                                         <option value="CC">CC</option>
                                         <option value="PASS">PASS</option>
                                         <option value="DNI">DNI</option>
+                                        <option value="RUC">RUC</option>
                                     </select>
                                     
                                 </div>

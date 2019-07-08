@@ -17,7 +17,7 @@ class CreateProveedoresTable extends Migration
             // $table->increments('id');
             $table->integer('id')->unsigned();
             $table->string('contacto', 50)->nullable();
-            $table->string('telefono', 50)->nullable();
+            $table->string('telefono_contacto', 50)->nullable();
             // $table->timestamps();
             
             $table->foreign('id')->references('id')->on('personas')->onDelete('cascade');

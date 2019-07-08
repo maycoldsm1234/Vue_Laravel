@@ -118,7 +118,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
+                        <button type="button" class="btn btn-danger" @click="cerrarModal()">Cerrar</button>
                         <button type="button" class="btn btn-primary" v-if="tipoAccion==1" @click="registrarCategoria()">Guardar</button>
                         <button type="button" class="btn btn-success" v-if="tipoAccion==2" @click="actualizarCategoria()">Actualizar</button>
                     </div>
