@@ -131,6 +131,20 @@
                                     <input type="email" v-model="email" class="form-control" placeholder="Ingrese Email">
                                 </div>
                             </div>
+                            
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="email-input">Contacto</label>
+                                <div class="col-md-9">
+                                    <input type="text" v-model="contacto" class="form-control" placeholder="Nombre del Contacto">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="email-input">Telefono de Contacto</label>
+                                <div class="col-md-9">
+                                    <input type="text" v-model="telefono_contacto" class="form-control" placeholder="Telefono del Contacto">
+                                </div>
+                            </div>
+                            
                             <div v-show="errorCategoria" class="form-group row div-error">
                                 <div class="text-center text-error">
                                     <div v-for="error in errorMostrarMensajeCategoria" :key="error" v-text="error">
@@ -269,7 +283,7 @@
                 }
 
                 let me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
-                axios.post('/cliente/registrar',{
+                axios.post('/proveedor/registrar',{
                     // Almacena los nuevos parametros enviados por medio de esta petición
                     'nombre' : this.nombre,
                     'tipo_documento' : this.tipo_documento,
@@ -297,7 +311,7 @@
                 }
 
                 let me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
-                axios.put('/cliente/actualizar',{
+                axios.put('/proveedor/actualizar',{
                     // Almacena los nuevos parametros enviados por medio de esta petición
                     'nombre' : this.nombre,
                     'tipo_documento' : this.tipo_documento,
@@ -305,6 +319,8 @@
                     'direccion' : this.direccion,
                     'telefono' : this.telefono,
                     'email' : this.email,
+                    'contacto' : this.contacto,
+                    'telefono_contacto' : this.telefono_contacto,
                     'id' : this.persona_id
 
                 }).then(function(response){
@@ -337,11 +353,15 @@
                 this.modal=0;
                 this.tituloModal = '';
                 this.nombre = '';
-                this.tipo_documento = '';
+                this.tipo_documento = 'RUC';
                 this.num_documento = '';
                 this.direccion = '';
                 this.telefono = '';
                 this.email = '';
+                this.contacto = '';
+                this.telefono_contacto = '';
+                this.errorPersona = 0;
+
             },
             
             //abrirModal(model, action, data = []){
@@ -356,13 +376,15 @@
                             case 'registrar':
                             {
                                 this.modal = 1;
-                                this.tituloModal = 'Registrar Persona';
+                                this.tituloModal = 'Registrar Proveedor';
                                 this.nombre = '';
                                 this.tipo_documento = 'DNI';
                                 this.num_documento = '';
                                 this.direccion = '';
                                 this.telefono = '';
                                 this.email = '';
+                                this.contacto = '';
+                                this.telefono_contacto = '';
                                 this.tipoAccion = 1;
                                 break;
                             }
@@ -370,7 +392,7 @@
                             {
                                 // console.log(data);
                                 this.modal = 1;
-                                this.tituloModal = 'Actualizar Persona';
+                                this.tituloModal = 'Actualizar Proveedor';
                                 this.tipoAccion = 2;
                                 
                                 this.persona_id = data['id'];
@@ -380,6 +402,8 @@
                                 this.direccion = data['direccion'];
                                 this.telefono = data['telefono'];
                                 this.email = data['email'];
+                                this.contacto = data['contacto'];
+                                this.telefono_contacto = data['telefono_contacto'];
                                 break;
                             }
                         }
