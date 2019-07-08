@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Rol;
+
+
 class RolController extends Controller
 {
-    //
-  /**
+    
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -43,4 +45,21 @@ class RolController extends Controller
         ];
     }
     
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function selectRol(Request $request)
+    {
+        // if (!$request->ajax()) return redirect('/');
+        $roles = Rol::where('condicion','=','1')
+        ->select('id','nombre')
+        ->orderBy('nombre', 'asc')->get();
+
+        return ['roles' => $roles]; 
+    }
+    
+
+
 }

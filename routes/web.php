@@ -49,6 +49,7 @@ Route::get('/rol','RolController@index');
 Route::post('/rol/registrar','RolController@store');
 Route::put('/rol/actualizar','RolController@update');
 
+Route::get('/rol/selectRol', 'RolController@selectRol');
 
 // Rutas Usuario
 Route::get('/user','UserController@index');
