@@ -3847,7 +3847,7 @@ __webpack_require__.r(__webpack_exports__);
 
       var me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
 
-      axios.post('/proveedor/registrar', {
+      axios.post('/user/registrar', {
         // Almacena los nuevos parametros enviados por medio de esta petición
         'nombre': this.nombre,
         'tipo_documento': this.tipo_documento,
@@ -3855,8 +3855,9 @@ __webpack_require__.r(__webpack_exports__);
         'direccion': this.direccion,
         'telefono': this.telefono,
         'email': this.email,
-        'contacto': this.contacto,
-        'telefono_contacto': this.telefono_contacto
+        'password': this.password,
+        'usuario': this.usuario,
+        'idrol': this.idrol
       }).then(function (response) {
         //En caso de registrar la categoria, realizara estas dos funciones.
         me.cerrarModal();
@@ -3873,7 +3874,7 @@ __webpack_require__.r(__webpack_exports__);
 
       var me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
 
-      axios.put('/proveedor/actualizar', {
+      axios.put('/user/actualizar', {
         // Almacena los nuevos parametros enviados por medio de esta petición
         'nombre': this.nombre,
         'tipo_documento': this.tipo_documento,
@@ -3881,8 +3882,9 @@ __webpack_require__.r(__webpack_exports__);
         'direccion': this.direccion,
         'telefono': this.telefono,
         'email': this.email,
-        'contacto': this.contacto,
-        'telefono_contacto': this.telefono_contacto,
+        'usuario': this.usuario,
+        'password': this.password,
+        'idrol': this.idrol,
         'id': this.persona_id
       }).then(function (response) {
         //En caso de registrar la categoria, realizara estas dos funciones.
@@ -3897,8 +3899,10 @@ __webpack_require__.r(__webpack_exports__);
       this.errorPersona = 0;
       this.errorMostrarMensajePersona = []; //Validaciones
 
-      if (!this.nombre) this.errorMostrarMensajePersona.push("El nombre de la Persona no puede estar Vacío..."); // Cuando tiene un error de registro, la variable errorCategoria pasa a 1
-
+      if (!this.nombre) this.errorMostrarMensajePersona.push("El nombre de la Persona no puede estar Vacío...");
+      if (!this.usuario) this.errorMostrarMensajePersona.push("El Usuario de la Persona no puede estar Vacío...");
+      if (!this.password) this.errorMostrarMensajePersona.push("El Password de la Persona no puede estar Vacío...");
+      if (this.rol == 0) this.errorMostrarMensajePersona.push("Por favor Seleccionar un Rol Para el Usuario...");
       if (this.errorMostrarMensajePersona.length) this.errorPersona = 1;
       return this.errorPersona;
     },
