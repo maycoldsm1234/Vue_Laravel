@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Proveedor;
+use Illuminate\Http\Request;
 use App\Persona;
+use App\User;
 
-
-
-class ProveedorController extends Controller
+class UserController extends Controller
 {
-
+    //
+    
     /**
      * Display a listing of the resource.
      *
@@ -27,19 +26,22 @@ class ProveedorController extends Controller
 
         if($buscar=='')
         {
-            $personas = Proveedor::join('personas','proveedores.id','=','personas.id')
+            $personas = User::join('personas','users.id','=','personas.id')
+            ->join('roles','users.id','=','roles.id')
             ->select('personas.id','personas.nombre','personas.tipo_documento',
             'personas.num_documento','personas.direccion','personas.telefono',
-            'personas.email','proveedores.contacto','proveedores.telefono_contacto')
+            'personas.email','users.usuario','users.password','users.condicion',
+            'users.idrol','roles.nombre as rol')
             ->orderBy('personas.id','desc')->paginate(3);
         }
         else
         {
-            $personas = Proveedor::join('personas','proveedores.id','=','personas.id')
+            $personas = User::join('personas','users.id','=','personas.id')
+            ->join('roles','users.id','=','roles.id')
             ->select('personas.id','personas.nombre','personas.tipo_documento',
             'personas.num_documento','personas.direccion','personas.telefono',
-            'personas.email','proveedores.contacto','proveedores.telefono_contacto')
-            ->orderBy('personas.id','desc')
+            'personas.email','users.usuario','users.password','users.condicion',
+            'users.idrol','roles.nombre as rol')
             ->where('personas.'.$criterio , 'like', '%' . $buscar . '%')
             ->orderBy('id','desc')->paginate(3); 
         }
@@ -85,12 +87,14 @@ class ProveedorController extends Controller
             
             $persona->save();
 
-            $proveedor = new Proveedor();
-            $proveedor->contacto = $request->input('contacto');
-            $proveedor->telefono_contacto = $request->input('telefono_contacto');
-            $proveedor->id = $persona->id;
+            $user = new User();
+            $user->usuario = $request->input('usuario');
+            $user->password = bcrypt($request->input('password'));
+            $user->condicion = '1';
+            $user->idrol = $request->input('idrol');        
+            $user->id = $persona->id;
             
-            $proveedor->save();
+            $user->save();
             // Ejecuta Los cambios en la db.
             DB::commit();
          
@@ -119,10 +123,12 @@ class ProveedorController extends Controller
             DB::beginTransaction();
                 
             // Primero Busca El ID que dea modificar en ambas tablas
-            $proveedor = Proveedor::findOrFail($request->id);
+            $user = User::findOrFail($request->id);
 
-            $persona = Persona::findOrFail($proveedor->id);
+            $persona = Persona::findOrFail($user->id);
 
+
+           
             // Ejecuta las peticiones, recolectando los datos del formulario tabla Personas
             $persona->nombre = $request->input('nombre');
             $persona->tipo_documento = $request->input('tipo_documento');
@@ -135,10 +141,12 @@ class ProveedorController extends Controller
 
             
             // Ejecuta las peticiones, recolectando los datos del formulario tabla Proveedor
-            $proveedor->contacto = $request->input('contacto');
-            $proveedor->telefono_contacto = $request->input('telefono_contacto');
-            
-            $proveedor->save();
+            $user->usuario = $request->input('usuario');
+            $user->password = bcrypt($request->input('password'));
+            $user->condicion = '1';
+            $user->idrol = $request->idrol;
+
+            $user->save();
             // Ejecuta Los cambios en la db.
             DB::commit();
         
@@ -147,6 +155,40 @@ class ProveedorController extends Controller
             // En caso tal de algún error, desace la transacción
             DB::rollBack();
         }
+    }
+
+    /**
+     * desactived the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function desactivar(Request $request)
+    {
+        //
+        if (!$request->ajax()) return redirect('/');
+        
+        $user = User::findOrFail($request->id);
+        $user->condicion = '0';
+        $user->save();
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function activar(Request $request)
+    {
+        //
+        if (!$request->ajax()) return redirect('/');
+        
+        $user = User::findOrFail($request->id);
+        $user->condicion = '1';
+        $user->save();
     }
 
 }

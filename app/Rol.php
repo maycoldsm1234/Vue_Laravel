@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class Rol extends Model
 {
@@ -13,5 +14,8 @@ class Rol extends Model
 
     public $timestamps = false;
     
-
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }
