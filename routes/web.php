@@ -57,3 +57,9 @@ Route::post('/user/registrar','UserController@store');
 Route::put('/user/actualizar','UserController@update');
 Route::put('/user/desactivar','UserController@desactivar');
 Route::put('/user/activar','UserController@activar');
+
+
+// Rutas Usuario
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

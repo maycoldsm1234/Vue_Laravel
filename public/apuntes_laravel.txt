@@ -302,8 +302,8 @@
     // Antes del Body
     <script src="js/plantilla.js"></script>
 
-   
-[*] 
+[*] Verificar Lista de rutas...
+	php artisan route:list
 	
 [*] 
 	
