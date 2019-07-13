@@ -41,7 +41,7 @@
                 <template v-if="menu==12">
                     <h1>Acerca de...</h1>
                 </template>
-            @else if (Auth::user()->idrol == 2)
+            @elseif (Auth::user()->idrol == 2)
                 <template v-if="menu==5">
                     <h1>Ventas</h1>
                 </template>
@@ -57,7 +57,7 @@
                 <template v-if="menu==12">
                     <h1>Acerca de...</h1>
                 </template>
-            @else if(Auth::user()->idrol == 3)
+            @elseif (Auth::user()->idrol == 3)
                 <template v-if="menu==1">
                     <categoria></categoria>
                 </template>

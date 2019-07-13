@@ -19,10 +19,12 @@ class LoginController extends Controller
     |
     */
 
+    // 
     public function showLoginForm(){
         return view('auth.login');
     }
 
+    // Funcion Iniciar Sesión
     public function login(Request $request)
     {
         // Verifica que los datos si existan en la db.
@@ -44,6 +46,7 @@ class LoginController extends Controller
 
     }
 
+    // Validar Datos ingresados para usuario y contraseña que si existan en la db.
     protected function validateLogin(Request $request)
     {
         $this->validate($request, 
@@ -52,6 +55,14 @@ class LoginController extends Controller
             'password' => 'required|string',
             
         ]);
+    }
+
+    //
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        return redirect('/');
     }
 
 }
