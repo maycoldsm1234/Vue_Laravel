@@ -25,6 +25,7 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+        // Verifica que los datos si existan en la db.
         $this->validateLogin($request);
 
         // Verificamos que los datos ingresados para autenticación sean correctos, adicional que su 
@@ -37,8 +38,9 @@ class LoginController extends Controller
         
 
         return back()
-        ->withErrors(['usuario' => trans('auth.failed')])
-        ->withInput(request(['usuario']));
+        ->withErrors(['usuario' => trans('auth.failed')]) // En caso de algun error, invoca el metodo failed en Resources/Langs/auth
+        ->withInput(request(['usuario']));  // En caso tal que el usuario exista, pero con credenciales invalidas... 
+                                            // retorna el usuario al formulario login por medio de la propiedad value="{{ old('usuario') }}"
 
     }
 
