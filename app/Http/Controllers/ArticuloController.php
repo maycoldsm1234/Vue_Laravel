@@ -45,6 +45,22 @@ class ArticuloController extends Controller
         ];
     }
 
+    /**
+    * Store a newly created resource in storage.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @return \Illuminate\Http\Response
+    */
+    public function buscarArticulo(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+        $filtro = $request->filtro;
+        $articulos = Articulo::where('codigo', '=', $filtro)
+        ->select('id','nombre')
+        ->orderBy('nombre', 'asc')->take(1)->get();
+
+        return ['articulos' => $articulos];
+    }
 
     /**
      * Store a newly created resource in storage.

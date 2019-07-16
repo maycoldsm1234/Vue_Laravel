@@ -101,9 +101,8 @@
                                         placeholder="Buscar Proveedores..."
                                         :onChange="getDatosProveedor"
                                     >
-                                        
-                                    </v-select>
-                                    
+                                     
+                                    </v-select> 
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -138,28 +137,29 @@
                         <div class="form-group row border">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="">Articulo</label>
+                                    <label for="">Articulo <span style="color: red;" v-show="idarticulo==0">(*Seleccione)</span></label>
                                     <div class="form-inline">
-                                        <input type="text" v-model="idarticulo" class="form-control" name="" id="" placeholder="Ingrese Articulo">
+                                        <input type="text" v-model="codigo" @keyup.enter="buscarArticulo()" class="form-control" placeholder="Ingrese Articulo">
                                         <button class="btn btn-primary">...</button>
+                                        <input type="text" readonly class="form-control" v-model="articulo">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label for="">Precio</label>
+                                    <label for="">Precio <span style="color: red;" v-show="precio==0">(*Ingrese)</span></label>
                                     <input type="number" value="0" step="any" class="form-control" v-model="precio">
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label for="">Cantidad</label>
+                                    <label for="">Cantidad <span style="color: red;" v-show="cantidad==0">(*Ingrese)</span></label>
                                     <input type="number" value="0" class="form-control" v-model="cantidad">
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <button type="text" class="btn btn-success form-control btnagregar">
+                                    <button type="text" class="btn btn-success form-control btnagregar" @click="agregarDetalle()">
                                         <i class="icon-plus"></i>
                                     </button>
                                 </div>
@@ -177,24 +177,22 @@
                                             <th>SubTotal</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
+                                    <tbody v-if="arrayDetalle.length">
+                                        <tr v-for="detalle in arrayDetalle" :key="detalle.id">
                                             <td>
                                                 <button type="button" class="btn btn-danger btn-sm">
                                                     <i class="icon-close"></i>
                                                 </button>
                                             </td>
+                                            <td v-text="detalle.articulo"></td>
                                             <td>
-                                                Articulo # n
+                                                <input type="number" value="3" name="" id="" class="form-control" v-model="detalle.precio">
                                             </td>
                                             <td>
-                                                <input type="number" value="3" name="" id="" class="form-control">
+                                                <input type="number" value="3" name="" id="" class="form-control" v-model="detalle.cantidad">
                                             </td>
                                             <td>
-                                                <input type="number" value="3" name="" id="" class="form-control">
-                                            </td>
-                                            <td>
-                                                $ 6.000
+                                                {{ detalle.precio * detalle.cantidad }}
                                             </td>
                                         </tr>
                                         <tr style="background-color: #CEECF5;">
@@ -214,6 +212,13 @@
                                                 <strong>Total Neto:</strong>
                                             </td>
                                             <td>$2300</td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody v-else>
+                                        <tr>
+                                            <td colspan="5">
+                                                No hay Articulos Agregados...
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -273,6 +278,7 @@
             return {
                 ingreso_id: 0,
                 idproveedor : 0,
+                idarticulo: 0,
                 nombre : '',
                 tipo_comprobante : 'Boleta',
                 serie_comprobante : '',
@@ -299,7 +305,13 @@
                 },
                 offset : 3,
                 criterio : 'num_comprobante', // Inicializamos criterio de busqueda
-                buscar : '' 
+                buscar : '',
+                arrayArticulo: [],
+                idarticulo: 0,
+                codigo: '',
+                articulo: '',
+                precio: 0,
+                cantidad: 0
             }
         },
         components: {
@@ -365,13 +377,13 @@
             {
                 let me=this;
                 loading(true)
-
+                console.log("success");
                 var url = '/proveedor/selectProveedor?filtro='+search;
                 axios.get(url).then(function(response){
                     let respuesta = response.data;
                     q: search
                     me.arrayProveedor = respuesta.proveedores;
-                    console.log("success");
+                    //console.log("success");
                     loading(false)
                     //console.log(response);
                 })
@@ -379,7 +391,7 @@
                     console.log(error);
                 });
             },
-            
+            //
             getDatosProveedor(val1)
             {
                 // Esta función recibe el ID del proveedor Seleccionado
@@ -389,6 +401,28 @@
 
             },
             //
+            buscarArticulo()
+            {
+                let me = this;
+                var url = '/articulo/buscarArticulo?filtro=' + me.codigo;
+                axios.get(url).then(function(response){
+                    var respuesta = response.data;
+                    me.arrayArticulo = respuesta.articulos;
+
+                    if(me.arrayArticulo.length > 0)
+                    {
+                        me.articulo = me.arrayArticulo[0]['nombre'];
+                        me.idarticulo = me.arrayArticulo[0]['id'];
+                    }
+                    else
+                    {
+                        me.articulo = 'No existe Ningun articulo';
+                        me.idarticulo = 0;
+                    }
+                });
+            },
+
+            //
             cambiarPagina(page, buscar, criterio)
             {
                 let me = this;
@@ -397,6 +431,60 @@
                 // Envia la petición para visualizar la data de la pagina
                 me.listarIngreso(page,buscar,criterio);
 
+            },
+
+            //
+            encuentra(id)
+            {
+                var sw=0;
+                for(var i=0;i<this.arrayDetalle.length;i++)
+                {
+                    if(this.arrayDetalle[i].idarticulo==id)
+                    {
+                        sw=true;
+                    }
+                }
+                return sw;
+            },
+
+            //
+            agregarDetalle()
+            {
+                let me = this;
+                if(me.idarticulo == 0 || me.cantidad == 0 || me.precio == 0)
+                {
+                    // si se cumple esta condición, no agrega el producto
+                }
+                else
+                {
+                    if(me.encuentra(me.idarticulo))
+                    {
+                        swal({
+                            type:  'error',
+                            title: 'Error...',
+                            text:  'Este Articulo ya ha sido agregado anteriormente...',
+                        })
+                    }
+                    else
+                    {
+                        me.arrayDetalle.push({
+                        idarticulo: me.idarticulo,
+                        articulo: me.articulo,
+                        cantidad: me.cantidad,
+                        precio: me.precio
+                        });
+
+                        me.codigo = "";
+                        me.idarticulo = 0;
+                        me.articulo = "";
+                        me.cantidad = 0;
+                        me.precio = 0;
+
+                    }
+                    
+                }
+
+                
             },
 
             //
