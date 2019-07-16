@@ -86,8 +86,14 @@
 [*] Ejecución automatica de compilaciones en Vue...
     npm run watch
 
-[*] 
-
+[*] Instalar Vue-Select
+    npm install vue-select
+    importamos antes del export default
+    import vSelect from 'vue-select';
+    al igual agregamos antes del computed{}
+    components: {
+        vSelect 
+    },
 
 [*] 
 

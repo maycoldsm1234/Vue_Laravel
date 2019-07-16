@@ -67,7 +67,7 @@
                         </tbody>
                     </table>
                     <nav>
-                        <ul class="pagination">
+                        <ul class="pagination mt-2 mx-auto">
                             <li class="page-item" @v-if="pagination.current_page > 1">
                                 <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page -1,buscar,criterio)">Ant</a>
                             </li>

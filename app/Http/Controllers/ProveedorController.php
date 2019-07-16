@@ -59,6 +59,43 @@ class ProveedorController extends Controller
     }
 
     /**
+    * selectProveedor the specified resource in storage.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
+    /*public function selectProveedor(Request $request)
+    {
+        //if (!$request->ajax()) return redirect('/');
+
+        
+        $filtro = $request->filtro;
+        $proveedores = Proveedor::join('personas','proveedores.id','=','personas.id')
+        ->where('personas.nombre', 'like', '%'.$filtro.'%')
+        ->orWhere('personas.num_documento', 'like', '%'.$filtro.'%')
+        ->select('personas.id','personas.nombre','personas.num_documento')
+        ->orderBy('personas.nombre', 'asc')->get();
+        
+        return ['proveedores' => $proveedores];
+    }*/
+
+    public function selectProveedor(Request $request){
+        //if (!$request->ajax()) return redirect('/');
+ 
+        $filtro = $request->filtro;
+        $proveedores = Proveedor::join('personas','proveedores.id','=','personas.id')
+        ->where('personas.nombre', 'like', '%'. $filtro . '%')
+        ->orWhere('personas.num_documento', 'like', '%'. $filtro . '%')
+        ->select('personas.id','personas.nombre','personas.num_documento')
+        ->orderBy('personas.nombre', 'asc')->get();
+ 
+        return ['proveedores' => $proveedores];
+    }
+ 
+
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -149,4 +186,5 @@ class ProveedorController extends Controller
         }
     }
 
+    
 }

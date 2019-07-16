@@ -305,8 +305,10 @@
 [*] Verificar Lista de rutas...
 	php artisan route:list
 	
-[*] 
-	
+[*] Asignar zona horaria del pais
+	$mytime = Carbon::now('America/Bogota'); 
+	adicional se agrega  en la cabecera...
+		use Carbon\Carbon;
 [*] 
 	
 [*] 

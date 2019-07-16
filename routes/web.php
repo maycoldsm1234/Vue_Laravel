@@ -46,6 +46,12 @@ Route::group(['middleware'=>['auth']], function(){
         Route::get('/proveedor','ProveedorController@index');
         Route::post('/proveedor/registrar','ProveedorController@store');
         Route::put('/proveedor/actualizar','ProveedorController@update');
+        Route::get('/proveedor/selectProveedor','ProveedorController@selectProveedor');
+
+        // Rutas Ingreso Ventas
+        Route::get('/ingreso','IngresoController@index');
+        Route::get('/ingreso/registrar','IngresoController@store');
+        Route::get('/ingreso/desactivar','IngresoController@desactivar');
     });
 
     // Rutas para middleware Vendedor
@@ -58,6 +64,7 @@ Route::group(['middleware'=>['auth']], function(){
 
     });
    
+    // Rutas para middleware Administrador
     Route::group(['middleware'=>['Administrador']], function(){
         // Rutas Categoria
         Route::get('/categoria','CategoriaController@index');
@@ -78,7 +85,9 @@ Route::group(['middleware'=>['auth']], function(){
         Route::get('/proveedor','ProveedorController@index');
         Route::post('/proveedor/registrar','ProveedorController@store');
         Route::put('/proveedor/actualizar','ProveedorController@update');
+        Route::get('/proveedor/selectProveedor','ProveedorController@selectProveedor');
 
+        
         // Rutas Usuario
         Route::get('/user','UserController@index');
         Route::post('/user/registrar','UserController@store');
@@ -91,6 +100,9 @@ Route::group(['middleware'=>['auth']], function(){
         Route::post('/rol/registrar','RolController@store');
         Route::put('/rol/actualizar','RolController@update');
         Route::get('/rol/selectRol', 'RolController@selectRol');
+
+        // Rutas Ingreso Ventas
+        Route::get('/ingreso','IngresoController@index');
     });
 
 });
