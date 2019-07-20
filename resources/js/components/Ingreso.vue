@@ -29,45 +29,39 @@
                                 </div>
                             </div>
                         </div>
-                        <table class="table table-responsive table-bordered table-striped table-sm col-md-12">
+                        <table class="table table-bordered table-striped table-sm">
                             <thead>
                                 <tr>
                                     <th>Opciones</th>
-                                    <th>Usuario</th>
-                                    <th>Proveedor</th>
-                                    <th>Tipo Comprobante</th>
-                                    <th>Serie Comprobante</th>
-                                    <th>Num Comprobante</th>
-                                    <th>Fecha y Hora</th>
-                                    <th>Total</th>
-                                    <th>Impuesto</th>
+                                    <th>Código</th>
+                                    <th>Nombre</th>
+                                    <th>Categoría</th>
+                                    <th>Precio Venta</th>
+                                    <th>Stock</th>
                                     <th>Estado</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="ingreso in arrayIngreso" :key="ingreso.id">
+                                <tr v-for="articulo in arrayArticulo" :key="articulo.id">
                                     <td>
-                                        <button type="button" class="btn btn-warning btn-sm" @click="abrirModal('ingreso','actualizar', ingreso)">
-                                        <i class="icon-pencil"></i>
-                                        </button> &nbsp;
-                                        <template v-if="ingreso.estado=='Registrado'">
-                                            <button type="button" class="btn btn-danger btn-sm" @click="desactivarUsuario(ingreso.id)">
-                                                <i class="icon-trash"></i>
-                                            </button>
-                                        </template>
+                                        <button type="button" class="btn btn-success btn-sm" @click="agregarDetalleModal(articulo)">
+                                            <i class="icon-check"></i>
+                                        </button>
                                     </td>
-                                    <td v-text="ingreso.usuario"></td>
-                                    <td v-text="ingreso.nombre"></td>
-                                    <td v-text="ingreso.tipo_comprobante"></td>
-                                    <td v-text="ingreso.serie_comprobante"></td>
-                                    <td v-text="ingreso.num_comprobante"></td>
-                                    <td v-text="ingreso.fecha_hora"></td>
-                                    <td v-text="ingreso.total"></td>
-                                    <td v-text="ingreso.impuesto"></td>
-                                    <td v-text="ingreso.estado"></td>
-                                    
+                                    <td v-text="articulo.codigo"></td>
+                                    <td v-text="articulo.nombre"></td>
+                                    <td v-text="articulo.nombre_categoria"></td>
+                                    <td v-text="articulo.precio_venta"></td>
+                                    <td v-text="articulo.stock"></td>
+                                    <td>
+                                        <div v-if="articulo.condicion">
+                                            <span class="badge badge-success">Activo</span>
+                                        </div>
+                                        <div v-else>
+                                            <span class="badge badge-danger">Desactivado</span>
+                                        </div>
+                                    </td>
                                 </tr>
-                                
                             </tbody>
                         </table>
                         <nav>
@@ -140,7 +134,7 @@
                                     <label for="">Articulo <span style="color: red;" v-show="idarticulo==0">(*Seleccione)</span></label>
                                     <div class="form-inline">
                                         <input type="text" v-model="codigo" @keyup.enter="buscarArticulo()" class="form-control" placeholder="Ingrese Articulo">
-                                        <button class="btn btn-primary">...</button>
+                                        <button class="btn btn-primary" @click="abrirModal()">...</button>
                                         <input type="text" readonly class="form-control" v-model="articulo">
                                     </div>
                                 </div>
@@ -248,7 +242,59 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <select class="form-control col-md-3" id="opcion" name="opcion" v-model="criterioA">
+                                        <option value="nombre">Nombre</option>
+                                        <option value="descripcion">Descripción</option>
+                                        <option value="codigo">Código</option>
+                                    </select>
+                                    <input type="text" v-model="buscarA" @keyup.enter="listarArticulo(buscarA,criterioA)" class="form-control" placeholder="Texto a buscar">
+                                    <button type="submit" class="btn btn-primary" @click="listarArticulo(buscarA,criterioA)"><i class="fa fa-search"></i> Buscar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Opciones</th>
+                                        <th>Código</th>
+                                        <th>Nombre</th>
+                                        <th>Categoría</th>
+                                        <th>Precio Venta</th>
+                                        <th>Stock</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="articulo in arrayArticulo" :key="articulo.id">
+                                        <td>
+                                            <button type="button" class="btn btn-success btn-sm" @click="agregarDetalleModal( articulo)">
+                                                <i class="icon-check"></i>
+                                            </button>
+                                        </td>
+                                        <td v-text="articulo.codigo"></td>
+                                        <td v-text="articulo.nombre"></td>
+                                        <td v-text="articulo.nombre_categoria"></td>
+                                        <td v-text="articulo.precio_venta"></td>
+                                        <td v-text="articulo.stock"></td>
+                                        <td>
+                                            <div v-if="articulo.condicion">
+                                                <span class="badge badge-success">Activo</span>
+                                            </div>
+                                            <div v-else>
+                                                <span class="badge badge-danger">Desactivado</span>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" @click="cerrarModal()">Cerrar</button>
@@ -259,8 +305,7 @@
                 <!-- /.modal-content -->
             </div>
             <!-- /.modal-dialog -->
-        </div>
-        <!--Fin del modal-->
+         <!--Fin del modal-->
         <!-- Inicio del modal Eliminar -->
        
                 <!-- /.modal-content -->
@@ -308,6 +353,8 @@
                 offset : 3,
                 criterio : 'num_comprobante', // Inicializamos criterio de busqueda
                 buscar : '',
+                criterioA : 'nombre', // Inicializamos criterio de busqueda
+                buscarA : '',
                 arrayArticulo: [],
                 idarticulo: 0,
                 codigo: '',
@@ -402,6 +449,7 @@
                     console.log(error);
                 });
             },
+
             //
             getDatosProveedor(val1)
             {
@@ -411,6 +459,7 @@
                 me.idproveedor = val1.id;
 
             },
+
             //
             buscarArticulo()
             {
@@ -468,8 +517,8 @@
             //
             agregarDetalle()
             {
-                let me = this;
-                if(me.idarticulo == 0 || me.cantidad == 0 || me.precio == 0)
+                let me=this;
+                if(me.idarticulo==0 || me.cantidad==0 || me.precio==0)
                 {
                     // si se cumple esta condición, no agrega el producto
                 }
@@ -503,6 +552,45 @@
                 }
 
                 
+            },
+
+            agregarDetalleModal(data = [])
+            {
+                let me=this;
+                if(me.encuentra(data['id']))
+                {
+                    swal({
+                        type:  'error',
+                        title: 'Error...',
+                        text:  'Este Articulo ya ha sido agregado anteriormente...',
+                    })
+                }
+                else
+                {
+                    me.arrayDetalle.push({
+                    idarticulo: data['id'],
+                    articulo: data['nombre'],
+                    cantidad: 1,
+                    precio: 1
+                    });
+                }
+            },
+
+            // Listar datos en la vista Categoria
+            listarArticulo(buscar, criterio){
+                let me = this;
+                var url = '/articulo/listarArticulo?buscar=' + buscar + '&criterio=' + criterio;
+                axios.get(url).then(function(response){
+
+                    // Almacenamos todos los datos Recibidos en un Array "arrayCategoria"
+                    // Recibiendo todos los datos enviados desde la vista /categoria
+                    var respuesta = response.data;
+                    me.arrayArticulo = respuesta.articulos.data;
+                   //console.log(response);
+                })
+                .catch(function(error){
+                    console.log(error);
+                });
             },
 
             //
@@ -667,7 +755,6 @@
                 }
                 })
             },
-
           
             //
             validarIngreso()
@@ -696,68 +783,15 @@
             {
                 this.modal=0;
                 this.tituloModal = '';
-                this.nombre = '';
-                this.tipo_documento = 'DNI';
-                this.num_documento = '';
-                this.direccion = '';
-                this.telefono = '';
-                this.email = '';
-                this.usuario = '';
-                this.password = '';
-                this.idrol = '';
-                this.errorPersona = 0;
 
             },
             
-            //abrirModal(model, action, data = []){
-            abrirModal(modelo, accion, data = [])
+            //
+            abrirModal()
             {
-                this.selectRol();
-
-                switch(modelo)
-                {
-                    case "ingreso":
-                    {
-                        switch(accion)
-                        {
-                            case 'registrar':
-                            {
-                                this.modal = 1;
-                                this.tituloModal = 'Registrar Ingreso Pedido';
-                                this.nombre = '';
-                                this.tipo_documento = 'DNI';
-                                this.num_documento = '';
-                                this.direccion = '';
-                                this.telefono = '';
-                                this.email = '';
-                                this.usuario = '';
-                                this.password = '';
-                                this.idrol = '';
-                                this.tipoAccion = 1;
-                                break;
-                            }
-                            case 'actualizar':
-                            {
-                                // console.log(data);
-                                this.modal = 1;
-                                this.tituloModal = 'Actualizar Ingreso Pedido';
-                                this.tipoAccion = 2;
-                                
-                                this.persona_id = data['id'];
-                                this.nombre = data['nombre'];
-                                this.tipo_documento = data['tipo_documento'];
-                                this.num_documento = data['num_documento'];
-                                this.direccion = data['direccion'];
-                                this.telefono = data['telefono'];
-                                this.email = data['email'];
-                                this.usuario = data['usuario'];
-                                this.password = data['password'];
-                                this.idrol = data['idrol'];
-                                break;
-                            }
-                        }
-                    }
-                }
+                this.arrayArticulo = [];
+                this.modal = 1;
+                this.tituloModal = 'Seleccione uno o varios Articulos';      
             }
         },
         mounted() {

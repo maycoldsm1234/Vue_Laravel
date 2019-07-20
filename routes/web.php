@@ -37,6 +37,7 @@ Route::group(['middleware'=>['auth']], function(){
 
         // Rutas Articulo
         Route::get('/articulo','ArticuloController@index');
+        Route::get('/articulo/listarArticulo','ArticuloController@listarArticulo');
         Route::post('/articulo/registrar','ArticuloController@store');
         Route::put('/articulo/actualizar','ArticuloController@update');
         Route::put('/articulo/desactivar','ArticuloController@desactivar');
@@ -77,6 +78,7 @@ Route::group(['middleware'=>['auth']], function(){
  
         // Rutas Articulo
         Route::get('/articulo','ArticuloController@index');
+        Route::get('/articulo/listarArticulo','ArticuloController@listarArticulo');
         Route::post('/articulo/registrar','ArticuloController@store');
         Route::put('/articulo/actualizar','ArticuloController@update');
         Route::put('/articulo/desactivar','ArticuloController@desactivar');
