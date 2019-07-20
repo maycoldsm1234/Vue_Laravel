@@ -126,6 +126,16 @@
                                     <input type="text" class="form-control" v-model="num_comprobante" placeholder="000x">
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                 <div v-show="errorIngreso" class="form-group row div-error">
+                                    <div class="text-center text-error">
+                                        <div v-for="error in errorMostrarMensajeIngreso" :key="error" v-text="error">
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
 
                         </div>
                         <div class="form-group row border">
@@ -576,7 +586,7 @@
                 }
             },
 
-            // Listar datos en la vista Categoria
+            // Listar datos en el modelo listaArticulo
             listarArticulo(buscar, criterio){
                 let me = this;
                 var url = '/articulo/listarArticulo?buscar=' + buscar + '&criterio=' + criterio;
@@ -603,19 +613,16 @@
                 let me = this; // Indicamos que vamos a utilizar las funciones locales del metodo
                 axios.post('/ingreso/registrar',{
                     // Almacena los nuevos parametros enviados por medio de esta petición
-                    'nombre' : this.nombre,
-                    'tipo_documento' : this.tipo_documento,
-                    'num_documento' : this.num_documento,
-                    'direccion' : this.direccion,
-                    'telefono' : this.telefono,
-                    'email' : this.email,
-                    'password' : this.password,
-                    'usuario' : this.usuario,
-                    'idrol' : this.idrol
+                    'idproveedor': this.idproveedor,
+                    'tipo_comprobante': this.tipo_comprobante,
+                    'serie_comprobante': this.serie_comprobante,
+                    'num_comprobante': this.num_comprobante,
+                    'impuesto': this.impuesto,
+                    'total': this.total,
+                    'data': this.arrayDetalle
+
                 }).then(function(response){
-                    //En caso de registrar la categoria, realizara estas dos funciones.
-                    me.cerrarModal();
-                    me.listarIngreso(1, '', 'nombre');
+                    me.listarIngreso(1, '', 'num_comprobante');
                 }).catch(function (error){
                     console.log(error)
                 });
@@ -762,7 +769,11 @@
                 this.errorIngreso = 0;
                 this.errorMostrarMensajeIngreso = [];
                 //Validaciones
-                if(!this.nombre) this.errorMostrarMensajeIngreso.push("El nombre de la Persona no puede estar Vacío...");
+                // if(this.idproveedor==0) this.errorMostrarMensajeIngreso.push("Seleccione un proveedor...");
+                if(this.tipo_comprobante==0) this.errorMostrarMensajeIngreso.push("Seleccione el comprobante...");
+                if(!this.num_comprobante) this.errorMostrarMensajeIngreso.push("Ingrese un número de comprobante...");
+                if(this.arrayDetalle.length<=0) this.errorMostrarMensajeIngreso.push("Seleccione Articulos a Procesar...");
+
                 if(this.errorMostrarMensajeIngreso.length) this.errorIngreso = 1;
 
                 return this.errorIngreso;

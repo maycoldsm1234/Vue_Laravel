@@ -3291,6 +3291,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -3511,7 +3521,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       }
     },
-    // Listar datos en la vista Categoria
+    // Listar datos en el modelo listaArticulo
     listarArticulo: function listarArticulo(buscar, criterio) {
       var me = this;
       var url = '/articulo/listarArticulo?buscar=' + buscar + '&criterio=' + criterio;
@@ -3534,19 +3544,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       axios.post('/ingreso/registrar', {
         // Almacena los nuevos parametros enviados por medio de esta petición
-        'nombre': this.nombre,
-        'tipo_documento': this.tipo_documento,
-        'num_documento': this.num_documento,
-        'direccion': this.direccion,
-        'telefono': this.telefono,
-        'email': this.email,
-        'password': this.password,
-        'usuario': this.usuario,
-        'idrol': this.idrol
+        'idproveedor': this.idproveedor,
+        'tipo_comprobante': this.tipo_comprobante,
+        'serie_comprobante': this.serie_comprobante,
+        'num_comprobante': this.num_comprobante,
+        'impuesto': this.impuesto,
+        'total': this.total,
+        'data': this.arrayDetalle
       }).then(function (response) {
-        //En caso de registrar la categoria, realizara estas dos funciones.
-        me.cerrarModal();
-        me.listarIngreso(1, '', 'nombre');
+        me.listarIngreso(1, '', 'num_comprobante');
       })["catch"](function (error) {
         console.log(error);
       });
@@ -3657,8 +3663,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     validarIngreso: function validarIngreso() {
       this.errorIngreso = 0;
       this.errorMostrarMensajeIngreso = []; //Validaciones
+      // if(this.idproveedor==0) this.errorMostrarMensajeIngreso.push("Seleccione un proveedor...");
 
-      if (!this.nombre) this.errorMostrarMensajeIngreso.push("El nombre de la Persona no puede estar Vacío...");
+      if (this.tipo_comprobante == 0) this.errorMostrarMensajeIngreso.push("Seleccione el comprobante...");
+      if (!this.num_comprobante) this.errorMostrarMensajeIngreso.push("Ingrese un número de comprobante...");
+      if (this.arrayDetalle.length <= 0) this.errorMostrarMensajeIngreso.push("Seleccione Articulos a Procesar...");
       if (this.errorMostrarMensajeIngreso.length) this.errorIngreso = 1;
       return this.errorIngreso;
     },
@@ -47584,6 +47593,38 @@ var render = function() {
                           }
                         })
                       ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-12" }, [
+                      _c(
+                        "div",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.errorIngreso,
+                              expression: "errorIngreso"
+                            }
+                          ],
+                          staticClass: "form-group row div-error"
+                        },
+                        [
+                          _c(
+                            "div",
+                            { staticClass: "text-center text-error" },
+                            _vm._l(_vm.errorMostrarMensajeIngreso, function(
+                              error
+                            ) {
+                              return _c("div", {
+                                key: error,
+                                domProps: { textContent: _vm._s(error) }
+                              })
+                            }),
+                            0
+                          )
+                        ]
+                      )
                     ])
                   ]),
                   _vm._v(" "),
